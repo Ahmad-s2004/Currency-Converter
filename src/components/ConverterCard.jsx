@@ -11,6 +11,11 @@ export default function ConverterCard() {
   const [cryptoRates, setCryptoRates] = useState({})
   const [convertedAmount, setConvertedAmount] = useState("0")
   const [isLoading, setIsLoading] = useState(false)
+  const [history, setHistory] = useState(() => {
+    const savedHistory = localStorage.getItem("transfer_history")
+    return savedHistory ? JSON.parse(savedHistory) : []
+  })
+  
 
   let handelAmount = (e) => {
     let value = e.target.value
@@ -30,14 +35,31 @@ export default function ConverterCard() {
   }
 
   const calculateConversion = () => {
-    if (!amount || isNaN(amount) || parseFloat(amount) <= 0) return;
-
-    const numAmount = parseFloat(amount);
-
-    const amountInUSD = numAmount / exchangeRates[fromCurrency];
-    const finalResult = amountInUSD * exchangeRates[toCurrency];
-    setConvertedAmount(finalResult.toFixed(2));
-  };
+    if (!amount || isNaN(amount) || parseFloat(amount) <= 0) return
+  
+    const numAmount = parseFloat(amount)
+    const fromRate = exchangeRates[fromCurrency] || 1
+    const toRate = exchangeRates[toCurrency] || 1
+  
+    const amountInUSD = numAmount / fromRate
+    const finalResult = amountInUSD * toRate
+    const formattedResult = finalResult.toFixed(2)
+    
+    setConvertedAmount(formattedResult)
+  
+    const newRecord = {
+      id: Date.now(),
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      from: fromCurrency,
+      to: toCurrency,
+      amount: numAmount.toFixed(2),
+      result: formattedResult
+    };
+  
+    const updatedHistory = [newRecord, ...history].slice(0, 5)
+    setHistory(updatedHistory)
+    localStorage.setItem("transfer_history", JSON.stringify(updatedHistory))
+  }
 
   useEffect(() => {
     let fetchApi = async () => {
