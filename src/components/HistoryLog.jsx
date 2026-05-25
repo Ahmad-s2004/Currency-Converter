@@ -9,12 +9,11 @@ export default function HistoryLog({ clearHistory }) {
         setLocalHistory(JSON.parse(savedHistory))
       } else {
         setLocalHistory([])
-      }
-    }
+      }}
     loadStorageData()
+
     const intervalId = setInterval(() => {
       loadStorageData()
-      console.log("Local Storage logs reloaded background mein!")
     }, 2000)
     return () => clearInterval(intervalId)
   }, [])
@@ -23,7 +22,7 @@ export default function HistoryLog({ clearHistory }) {
     <div className="bg-slate-900/40 border border-slate-900 rounded-3xl p-6 backdrop-blur-md shadow-2xl shadow-slate-950/50">
       
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-extrabold text-lg text-slate-100 tracking-tight">Conversion Memory Buffer</h3>
+        <h3 className="font-extrabold text-lg text-slate-100 tracking-tight">Conversion History</h3>
         {localHistory.length > 0 && (
           <button 
             onClick={() => {
@@ -37,10 +36,9 @@ export default function HistoryLog({ clearHistory }) {
           </button>
         )}
       </div>
-      
       <div className="space-y-3">
         {localHistory.length === 0 ? (
-          <p className="text-xs text-slate-500 font-medium text-center py-4">No recent ledger data available.</p>
+          <p className="text-xs text-slate-500 font-medium text-center py-4">No recent data available.</p>
         ) : (
           localHistory.map((log) => (
             <div 

@@ -8,9 +8,7 @@ export default function ConverterCard() {
   const [fromCurrency, setFromCurrency] = useState("USD")
   const [toCurrency, setToCurrency] = useState("PKR")
   const [exchangeRates, setExchangeRates] = useState({})
-  const [cryptoRates, setCryptoRates] = useState({})
   const [convertedAmount, setConvertedAmount] = useState("0")
-  const [isLoading, setIsLoading] = useState(false)
   const [history, setHistory] = useState(() => {
     const savedHistory = localStorage.getItem("transfer_history")
     return savedHistory ? JSON.parse(savedHistory) : []

@@ -11,7 +11,7 @@ export default function App() {
   const [history, setHistory] = useState(() => {
     const savedHistory = localStorage.getItem("transfer_history")
     return savedHistory ? JSON.parse(savedHistory) : []
-  });
+  })
 
   useEffect(() => {
     let fetchApi = async () => {
@@ -22,12 +22,11 @@ export default function App() {
           setExchangeRates(data.conversion_rates)
         }
       } catch (error) {
-        console.error("Error fetching rates in App level:", error)
+        console.error("Error in fetching rates", error)
       }
     };
     fetchApi()
   }, [])
-
   const clearHistory = () => {
     setHistory([])
     localStorage.removeItem("transfer_history")
@@ -35,23 +34,11 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans antialiased selection:bg-indigo-500 selection:text-white">
-      
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
-
       <main className="max-w-4xl mx-auto px-4 py-12">
-        {activeTab === 'converter' && (
-          <ConverterCard 
-            exchangeRates={exchangeRates} 
-            history={history} 
-            setHistory={setHistory} 
-          />
-        )}
-        {activeTab === 'analytics' && (
-          <AnalyticsTable exchangeRates={exchangeRates} />
-        )}
-        {activeTab === 'history' && (
-          <HistoryLog history={history} clearHistory={clearHistory} />
-        )}
+        {activeTab === 'converter' && (<ConverterCard exchangeRates={exchangeRates} history={history} setHistory={setHistory}/>)}
+        {activeTab === 'analytics' && (<AnalyticsTable exchangeRates={exchangeRates} />)}
+        {activeTab === 'history' && (<HistoryLog history={history} clearHistory={clearHistory} />)}
       </main>
 
     </div>
